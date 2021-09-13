@@ -24,9 +24,9 @@ render:
   render-banned: false
   # [Required] Crafatar service URL, used for player avatar/skin model generating
   crafatar: https://crafatar.com
-  # Crafatar for third-party yggdrasil api
+  # [Required] Crafatar for third-party yggdrasil api
   ygg-crafatar: https://user.turna.live/crafater
-  #Yggdrasil API Session Server Profile URL
+  # [Required] Yggdrasil API Session Server Profile URL
   ygg-profile: https://user.turna.live/api/yggdrasil/sessionserver/session/minecraft/profile
 
   # Output
