@@ -30,6 +30,7 @@
   "homepage": "https://github.com/NyaaCat/NyaaStats#readme",
   "dependencies": {
     "axios": "^0.19.2",
+    "axios-retry": "^3.1.9",
     "fs-extra": "^2.0.0",
     "gauge": "^2.7.4",
     "inquirer": "^5.2.0",

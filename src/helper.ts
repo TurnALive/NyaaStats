@@ -1,8 +1,11 @@
 import fs from 'fs-extra'
 import axios from 'axios'
 import inquirer from 'inquirer'
+import axiosRetry from 'axios-retry'
 
 import * as logger from './logger'
+
+axiosRetry(axios, {retries: 3,retryDelay: axiosRetry.exponentialDelay})
 
 export async function download (apiPath: string, dest: string): Promise<void> {
   logger.Assets.info('DOWNLOAD', apiPath)

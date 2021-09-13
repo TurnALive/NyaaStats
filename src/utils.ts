@@ -11,6 +11,7 @@ import {defaultSkin, delay, download, mergeStats, writeJSON} from './helper'
 import * as logger from './logger'
 
 const config = loadConfig()
+let official = true
 
 export default class Utils {
   apiLimited: boolean
@@ -113,7 +114,7 @@ export default class Utils {
         const uuidShort = uuid.replace(/-/g, '')
         let history
         try {
-          history = await this.getNameHistory(uuidShort)
+          history = official?await this.getNameHistory(uuidShort):await this.getYggName(uuidShort)
         } catch (error) {
           return reject()
         }
@@ -184,6 +185,45 @@ export default class Utils {
     return history
   }
 
+  async getYggName (uuid: LongUuid): Promise<McNameHistory | null>  {
+    const apiYggName = `${config.get('render.ygg-profile')}/${uuid}`
+    let yggName: string
+    try {
+      yggName = await this.getYggAPI(apiYggName)
+    } catch (err) {
+      return null
+    }
+    if (!yggName) return null
+    return this.typeConvert(yggName)
+  }
+
+  async getYggAPI (apiPath: string): Promise<string> {
+    if (config.get('api.ratelimit') && this.apiLimited) {
+      await delay(10)
+      return this.getYggAPI(apiPath)
+    }
+    this.apiLimited = true
+    logger.YggAPI.info('REQUEST', apiPath)
+
+    let body
+    try {
+      const res = await axios.get(apiPath, {timeout: 30000})
+      body=res.data
+    } catch (err) {
+      logger.YggAPI.error('REQUEST', apiPath, err.toJSON())
+      setTimeout(() => {
+        this.apiLimited = false
+      }, config.get<number>('api.ratelimit') * 3000)
+      throw new Error(err.toJSON())
+    }
+
+    setTimeout(() => {
+      this.apiLimited = false
+    }, config.get<number>('api.ratelimit') * 1000)
+    
+    return body.name
+  }
+
   async getMojangAPI <T> (apiPath: string): Promise<T> {
     if (config.get('api.ratelimit') && this.apiLimited) {
       await delay(10)
@@ -218,9 +258,9 @@ export default class Utils {
       throw new Error(error)
     }
 
-    const apiPrefixAvatar = `${config.get('render.crafatar')}/avatars/`
-    const apiPrefixBody = `${config.get('render.crafatar')}/renders/body/`
-    const apiPrefixSkin = `${config.get('render.crafatar')}/skins/`
+    const apiPrefixAvatar = official?`${config.get('render.crafatar')}/avatars/`:`${config.get('render.ygg-crafatar')}/avatars/`
+    const apiPrefixBody = official?`${config.get('render.crafatar')}/renders/body/`:`${config.get('render.ygg-crafatar')}/renders/body/`
+    const apiPrefixSkin = official?`${config.get('render.crafatar')}/skins/`:`${config.get('render.ygg-crafatar')}/skins/`
 
     const slim = `&default=MHF_${defaultSkin(uuid)}`
 
@@ -238,7 +278,39 @@ export default class Utils {
     )
   }
 
+  async checkOfficial (uuid: LongUuid): Promise<boolean> {
+    const apiNameHistory = `https://api.mojang.com/user/profiles/${uuid}/names`
+    const apiYggName = `${config.get('render.ygg-profile')}/${uuid}`
+    let history
+    try {
+      history = await this.getMojangAPI<McNameHistory>(apiNameHistory)
+      if(history) return true
+    } catch (err) {
+      throw new Error(err)
+    }
+    if (!history) {
+      try {
+        history = await this.getYggAPI(apiYggName)
+        if(history) return false
+      } catch (err) {
+        throw new Error(err)
+      }
+    }
+    throw new Error()
+  }
+
+  async typeConvert (history: string): Promise<McNameHistory | null> {
+    const result:McNameHistory = [{name:history}]
+    return result
+  }
+
   async createPlayerData (uuid: LongUuid, banned = false): Promise<NSPlayerStatsJson> {
+    try {
+      official = await this.checkOfficial(uuid.replace(/-/g, ''))
+    } catch (error) {
+      logger.PlayerData.error('Player Not Found in neither Mojang nor Yggdrasil API.')
+      throw new Error(error)
+    }
     const playerpath = path.join(config.get<string>('render.output'), uuid.replace(/-/g, ''))
     let data
     try {
