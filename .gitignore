@@ -3,6 +3,7 @@ node_modules
 dist
 test
 /config.yml
+web/public/data
 
 # local env files
 .env.local

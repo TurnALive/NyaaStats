@@ -5,27 +5,45 @@ render:
   # Data sources
 
   # [Required] `level.dat` file path. Example: "/opt/minecraft/world/level.dat"
-  level: data/level.dat
+  level: /opt/Creative/server/world/level.dat
   # [Required] `playerdata` directory path. Example: "/opt/minecraft/world/playerdata"
-  playerdata: data/playerdata
-  # [Required] `stats` directory path. Example: "/opt/minecraft/world/stats"
-  stats: data/stats
-  # [Required] `advancements` directory path. Example: "/opt/minecraft/world/advancements"
-  advancements: data/advancements
+  playerdata:
+    - /opt/Survival/server/Survival/playerdata
+    - /opt/SurvivalV1/server/Survival/playerdata
+    - /opt/Creative/server/world/playerdata
+    - /opt/Anniversary/server/world/playerdata
+    - /opt/Flat/server/world/playerdata
+    - /opt/Test/server/Survival/playerdata
+  # [Required] `stats` directory path. Example: "/opt/minecraft/world/stats". Use the first available one if you have multiple.
+  stats:
+    - /opt/Survival/server/Survival/stats
+    - /opt/SurvivalV1/server/Survival/stats
+    - /opt/Creative/server/world/stats
+    - /opt/Anniversary/server/world/stats
+    - /opt/Flat/server/world/stats
+    - /opt/Test/server/Survival/stats
+
+  # [Required] `advancements` directory path. Example: "/opt/minecraft/world/advancements". Use the first available one if you have multiple.
+  advancements:
+    - /opt/Survival/server/Survival/advancements
+    - /opt/SurvivalV1/server/Survival/advancements
+    - /opt/Creative/server/world/advancements
+    - /opt/Anniversary/server/world/advancements
+    - /opt/Flat/server/world/advancements
+    - /opt/Test/server/Survival/advancements
+
   # Whether to only process whitelisted players. Possible values:
   #   {string} - `whitelist.json` file path. Example: "/opt/minecraft/whitelist.json"
   #   (unset)  - Disable this feature (to process all reachable players)
-  whitelist: whitelist.json
+  whitelist:
   # Banned UUID list. Possible values:
   #   {string} - `banned-players.json` file path. Example: "/opt/minecraft/banned-players.json"
   #   (unset)  - Disable this feature (to assume no bans)
-  banned-players: banned-players.json
+  banned-players: /opt/Creative/server/banned-players.json
   # Whether to render banned players. Default value: `false`
   render-banned: false
   # [Required] Crafatar service URL, used for player avatar/skin model generating
-  crafatar: https://crafatar.com
-  # [Required] Crafatar for third-party yggdrasil api
-  ygg-crafatar: https://user.turna.live/crafater
+  crafatar: https://crafatar.com/
   # [Required] Yggdrasil API Session Server Profile URL
   ygg-profile: https://user.turna.live/api/yggdrasil/sessionserver/session/minecraft/profile
 
@@ -53,8 +71,8 @@ api:
 # Web app configuration
 web:
   # [Required] Web app title, will be displayed at page header and as window title
-  title: Nyaa Stats
+  title: TurnA Stats
   # [Required] Server name, will be displayed at welcome section and page footer
-  servername: Minecraft Server
+  servername: TurnALive
   # [Required] Server homepage URL, will be displayed at welcome section
-  homepage: https://minecraft.example.com
+  homepage: https://mc.turna.live/

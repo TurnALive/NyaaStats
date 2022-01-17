@@ -2,12 +2,13 @@ import log4js from 'log4js'
 
 log4js.configure({
   appenders: {
-    Default: {type: 'stdout'},
-    Config: {type: 'stdout'},
-    PlayerData: {type: 'stdout'},
-    MojangAPI: {type: 'stdout'},
-    Assets: {type: 'stdout'},
-    WriteJSON: {type: 'stdout'},
+    Default: { type: 'stdout' },
+    Config: { type: 'stdout' },
+    PlayerData: { type: 'stdout' },
+    MojangAPI: { type: 'stdout' },
+    YggAPI: { type: 'stdout' },
+    Assets: { type: 'stdout' },
+    WriteJSON: { type: 'stdout' },
   },
   categories: {
     default: {

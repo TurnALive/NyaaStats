@@ -3,7 +3,7 @@ import path from 'path'
 
 import loadConfig from './config'
 import Utils from './utils'
-import {confirm, writeJSON} from './helper'
+import { confirm, writeJSON } from './helper'
 import * as logger from './logger'
 import ProgressBar from './progressbar'
 
@@ -16,7 +16,7 @@ process.stdout.write('\x1Bc')
 const utils = new Utils()
 const config = loadConfig()
 
-void async function main () {
+void async function main() {
   const bannedUuidList = config.get('render.banned-players') ? utils.getBannedPlayers() : []
 
   const uuidList = (() => {

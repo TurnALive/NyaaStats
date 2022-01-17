@@ -33,3 +33,11 @@ interface McNameHistoryRecord {
 }
 
 type McNameHistory = McNameHistoryRecord[]
+
+interface McTimeRecord {
+  lived: UTCTimestamp
+  started: UTCTimestamp
+  last: UTCTimestamp
+}
+
+type McTimeInfo = McTimeRecord[]

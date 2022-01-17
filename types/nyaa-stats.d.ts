@@ -6,10 +6,11 @@ interface NSConfig {
   }
   render: {
     crafatar: string
+    'ygg-profile': string
     level: string
-    playerdata: string
-    stats: string
-    advancements: string
+    playerdata: string[]
+    stats: string[]
+    advancements: string[]
     whitelist?: string
     'banned-players'?: string
     'render-banned'?: boolean

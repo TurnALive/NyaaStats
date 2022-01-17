@@ -10,14 +10,14 @@ interface Config extends NSConfig {
   __filename: string
   __dirname: string
 
-  resolve (filepath: string): string
+  resolve(filepath: string): string
 
-  get<T> (keyPath: string | string[]): T
+  get<T>(keyPath: string | string[]): T
 }
 
 let config: Config
 
-export default function loadConfig (configPath = './config.yml'): Config {
+export default function loadConfig(configPath = './config.yml'): Config {
   const filename = path.resolve(configPath)
 
   if (config?.__filename === filename) {
@@ -38,10 +38,10 @@ export default function loadConfig (configPath = './config.yml'): Config {
   config = Object.assign(_config, {
     __filename: filename,
     __dirname: dirname,
-    resolve (filepath: string): string {
+    resolve(filepath: string): string {
       return path.resolve(dirname, filepath)
     },
-    get<T = unknown> (keyPath: string | string[]): T {
+    get<T = unknown>(keyPath: string | string[]): T {
       if (typeof keyPath === 'string') {
         keyPath = keyPath.split('.')
       }
